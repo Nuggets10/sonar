@@ -1,9 +1,12 @@
 #include <iostream>
 #include <string>
 
+#include "tui/equalizerWindow.hpp"
+#include "tui/libraryWindow.hpp"
+#include "tui/playerWindow.hpp"
+#include "tui/statusBar.hpp"
 #include "tui/tuiManager.hpp"
 #include "version.hpp"
-
 int main(int argc, char* argv[])
 {
     if (argc >= 2)
@@ -48,7 +51,21 @@ int main(int argc, char* argv[])
     }
 
     TuiManager tuiManager;
+
+    WINDOW* window = tuiManager.createWindow(tuiManager.height - 1, tuiManager.width / 3, 0, 0);
+    tuiManager.addComponent(std::make_unique<LibraryWindow>(window));
+
+    window = tuiManager.createWindow(tuiManager.height / 2 - 2, 2 * tuiManager.width / 3, 0,
+                                     tuiManager.width / 3);
+    tuiManager.addComponent(std::make_unique<PlayerWindow>(window));
+
+    window = tuiManager.createWindow(tuiManager.height / 2 + 1, 2 * tuiManager.width / 3,
+                                     tuiManager.height / 2 - 2, tuiManager.width / 3);
+    tuiManager.addComponent(std::make_unique<EqualizerWindow>(window));
+
+    window = tuiManager.createWindow(1, tuiManager.width, tuiManager.height - 1, 0);
+    tuiManager.addComponent(std::make_unique<StatusBar>(window));
+
     tuiManager.display();
-    tuiManager.createWindow(tuiManager.height, 5, 0, 0);
     return 0;
 }
