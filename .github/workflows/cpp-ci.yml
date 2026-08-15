@@ -1,0 +1,22 @@
+name: C++ CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - '**/*.cpp'
+      - '**/*.hpp'
+      - '**/*.hpp.in'
+      - '**/*.h'
+      - '**/*.h.in'
+      - '**/Makefile'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: make
+      run: make
