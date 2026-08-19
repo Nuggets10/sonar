@@ -1,6 +1,7 @@
 PROJECT_NAME := sonar
 
 CXX ?= g++
+PREFIX ?= /usr/local
 
 BUILD_DIR := build
 TARGET    := $(PROJECT_NAME)
@@ -16,7 +17,7 @@ SRCS := $(shell find src libs -type f -name '*.cpp' 2>/dev/null)
 OBJS := $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 DEPS := $(OBJS:.o=.d)
 
-.PHONY: all clean
+.PHONY: all clean install uninstall
 
 all: $(TARGET)
 
@@ -33,6 +34,13 @@ $(VERSION_OUT): $(VERSION_IN) $(VERSION_FILE)
 	sed "s/@PROJECT_VERSION@/$$VERSION_NUM/g" $(VERSION_IN) > $@
 
 -include $(DEPS)
+
+install: $(TARGET)
+	install -d $(DESTDIR)$(PREFIX)/bin
+	install -m 755 $(TARGET) $(DESTDIR)$(PREFIX)/bin/$(TARGET)
+
+uninstall:
+	rm -f $(DESTDIR)$(PREFIX)/bin/$(TARGET)
 
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET)
