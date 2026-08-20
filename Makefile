@@ -17,7 +17,7 @@ SRCS := $(shell find src libs -type f -name '*.cpp' 2>/dev/null)
 OBJS := $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 DEPS := $(OBJS:.o=.d)
 
-.PHONY: all clean install uninstall
+.PHONY: all clean install uninstall format
 
 all: $(TARGET)
 
@@ -44,3 +44,6 @@ uninstall:
 
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET)
+
+format:
+	@./tools/format.sh
