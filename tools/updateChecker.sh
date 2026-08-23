@@ -1,6 +1,6 @@
 #!/bin/bash
 REMOTE_VERSION_URL="https://raw.githubusercontent.com/Nuggets10/sonar/refs/heads/main/VERSION"
-LOCAL_VERSION_FILE="../VERSION"
+LOCAL_VERSION_FILE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../VERSION"
 
 echo "Searching for local version file..."
 if [ ! -f "$LOCAL_VERSION_FILE" ]; then
