@@ -1,0 +1,40 @@
+#include <iostream>
+#include <string>
+
+#define MINIAUDIO_IMPLEMENTATION
+#include "libs/miniaudio/miniaudio.h"
+
+static ma_engine maEngine;
+static ma_sound maSound;
+
+void initPlayer()
+{
+    ma_result maResult = ma_engine_init(NULL, &maEngine);
+    if (maResult != MA_SUCCESS)
+    {
+        std::cerr << "Audio engine initialization has failed." << "\n";
+        return;
+    }
+}
+
+void uninitPlayer()
+{
+    ma_sound_uninit(&maSound);
+    ma_engine_uninit(&maEngine);
+}
+
+void playAudio(const std::string& filePath)
+{
+    ma_sound_uninit(&maSound);
+    ma_result maResult = ma_sound_init_from_file(
+        &maEngine, filePath.c_str(),
+        MA_SOUND_FLAG_STREAM | MA_SOUND_FLAG_NO_PITCH | MA_SOUND_FLAG_NO_SPATIALIZATION, NULL, NULL,
+        &maSound);
+    if (maResult != MA_SUCCESS)
+    {
+        std::cerr << "Failed to load audio file: " << filePath << "\n";
+        std::cerr << maResult << "\n";
+        return;
+    }
+    ma_sound_start(&maSound);
+}

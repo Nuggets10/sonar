@@ -2,7 +2,9 @@
 
 EqualizerWindow::EqualizerWindow(WINDOW* window) : isFocused(false), win(window) {}
 
-EqualizerWindow::~EqualizerWindow() { delwin(win); }
+EqualizerWindow::~EqualizerWindow() {
+    delwin(win);
+}
 
 void EqualizerWindow::updateWindow()
 {

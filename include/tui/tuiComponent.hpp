@@ -3,7 +3,7 @@
 
 class TuiComponent
 {
-   public:
+public:
     virtual ~TuiComponent() = default;
     virtual void updateWindow() = 0;
 };

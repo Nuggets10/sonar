@@ -2,7 +2,9 @@
 
 PlayerWindow::PlayerWindow(WINDOW* window) : isFocused(false), win(window) {}
 
-PlayerWindow::~PlayerWindow() { delwin(win); }
+PlayerWindow::~PlayerWindow() {
+    delwin(win);
+}
 
 void PlayerWindow::updateWindow()
 {

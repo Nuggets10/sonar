@@ -5,13 +5,13 @@
 
 class PlayerWindow : public TuiComponent
 {
-   public:
+public:
     PlayerWindow(WINDOW* window);
     ~PlayerWindow();
 
     void updateWindow() override;
     bool isFocused;
 
-   private:
+private:
     WINDOW* win;
 };

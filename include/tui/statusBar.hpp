@@ -5,12 +5,12 @@
 
 class StatusBar : public TuiComponent
 {
-   public:
+public:
     StatusBar(WINDOW* window);
     ~StatusBar();
 
     void updateWindow() override;
 
-   private:
+private:
     WINDOW* win;
 };

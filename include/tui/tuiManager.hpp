@@ -8,7 +8,7 @@
 
 class TuiManager
 {
-   public:
+public:
     int height;
     int width;
     TuiManager();
@@ -17,6 +17,6 @@ class TuiManager
     void addComponent(std::unique_ptr<TuiComponent> component);
     WINDOW* createWindow(int height, int width, int y, int x);
 
-   private:
+private:
     std::vector<std::unique_ptr<TuiComponent>> components;
 };

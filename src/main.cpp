@@ -1,12 +1,15 @@
 #include <iostream>
 #include <string>
 
+#include "core/library.hpp"
+#include "core/player.hpp"
 #include "tui/equalizerWindow.hpp"
 #include "tui/libraryWindow.hpp"
 #include "tui/playerWindow.hpp"
 #include "tui/statusBar.hpp"
 #include "tui/tuiManager.hpp"
 #include "version.hpp"
+
 int main(int argc, char* argv[])
 {
     if (argc >= 2)
@@ -17,7 +20,7 @@ int main(int argc, char* argv[])
 
         for (int i{1}; i < argc; i++)
         {
-            std::string arg{argv[i]};
+            std::string_view arg{argv[i]};
             if (arg == "--v" or arg == "--version")
             {
                 v_flag = true;
@@ -51,9 +54,14 @@ int main(int argc, char* argv[])
     }
 
     TuiManager tuiManager;
+    initPlayer();
 
     WINDOW* window = tuiManager.createWindow(tuiManager.height - 1, tuiManager.width / 3, 0, 0);
-    tuiManager.addComponent(std::make_unique<LibraryWindow>(window));
+    std::unique_ptr<LibraryWindow> libWindow = std::make_unique<LibraryWindow>(window);
+    LibraryWindow& libWindowRef = *libWindow;
+    tuiManager.addComponent(std::move(libWindow));
+
+    initLibrary(libWindowRef);
 
     window = tuiManager.createWindow(tuiManager.height / 2 - 2, 2 * tuiManager.width / 3, 0,
                                      tuiManager.width / 3);
@@ -67,5 +75,6 @@ int main(int argc, char* argv[])
     tuiManager.addComponent(std::make_unique<StatusBar>(window));
 
     tuiManager.display();
+    uninitPlayer();
     return 0;
 }

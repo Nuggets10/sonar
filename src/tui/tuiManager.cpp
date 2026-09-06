@@ -35,7 +35,7 @@ void TuiManager::addComponent(std::unique_ptr<TuiComponent> component)
 
 void TuiManager::display()
 {
-    char ch;
+    int ch;
     bool isRunning{true};
     refresh();
 
@@ -86,6 +86,30 @@ void TuiManager::display()
                     library->isFocused = false;
                 if (auto* equalizer = dynamic_cast<EqualizerWindow*>(component.get()))
                     equalizer->isFocused = true;
+            }
+        }
+        else
+        {
+            for (std::unique_ptr<TuiComponent>& component : components)
+            {
+                if (auto* library = dynamic_cast<LibraryWindow*>(component.get()))
+                {
+                    if (library->isFocused)
+                    {
+                        if (ch == 'w' or ch == KEY_UP)
+                        {
+                            library->decreaseIndex();
+                        }
+                        else if (ch == 's' or ch == KEY_DOWN)
+                        {
+                            library->increaseIndex();
+                        }
+                        else if (ch == 'e')
+                        {
+                            library->selectAudio();
+                        }
+                    }
+                }
             }
         }
     }
