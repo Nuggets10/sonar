@@ -2,7 +2,9 @@
 
 StatusBar::StatusBar(WINDOW* window) : win(window) {}
 
-StatusBar::~StatusBar() { delwin(win); }
+StatusBar::~StatusBar() {
+    delwin(win);
+}
 
 void StatusBar::updateWindow()
 {

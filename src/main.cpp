@@ -15,8 +15,6 @@ int main(int argc, char* argv[])
     if (argc >= 2)
     {
         bool v_flag{false};
-        bool h_flag{false};
-        bool s_flag{false};
 
         for (int i{1}; i < argc; i++)
         {
@@ -24,14 +22,6 @@ int main(int argc, char* argv[])
             if (arg == "--v" or arg == "--version")
             {
                 v_flag = true;
-            }
-            else if (arg == "--h" or arg == "--help")
-            {
-                h_flag = true;
-            }
-            else if (arg == "--s" or arg == "--settings")
-            {
-                s_flag = true;
             }
             else
             {
@@ -42,19 +32,11 @@ int main(int argc, char* argv[])
         if (v_flag)
         {
             std::cout << "Version \033[93m" << PROJECT_VERSION << "\033[0m" << std::endl;
-        }
-        if (h_flag)
-        {
-            std::cout << "h accepted";
-        }
-        if (s_flag)
-        {
-            std::cout << "s accepted";
+            return 0;
         }
     }
 
     TuiManager tuiManager;
-    initPlayer();
 
     WINDOW* window = tuiManager.createWindow(tuiManager.height - 1, tuiManager.width / 3, 0, 0);
     std::unique_ptr<LibraryWindow> libWindow = std::make_unique<LibraryWindow>(window);
@@ -62,10 +44,13 @@ int main(int argc, char* argv[])
     tuiManager.addComponent(std::move(libWindow));
 
     initLibrary(libWindowRef);
-
     window = tuiManager.createWindow(tuiManager.height / 2 - 2, 2 * tuiManager.width / 3, 0,
                                      tuiManager.width / 3);
-    tuiManager.addComponent(std::make_unique<PlayerWindow>(window));
+    auto playerWindow = std::make_unique<PlayerWindow>(window, libWindowRef);
+    PlayerWindow& playerWindowRef = *playerWindow;
+    tuiManager.addComponent(std::move(playerWindow));
+
+    initPlayer(playerWindowRef);
 
     window = tuiManager.createWindow(tuiManager.height / 2 + 1, 2 * tuiManager.width / 3,
                                      tuiManager.height / 2 - 2, tuiManager.width / 3);

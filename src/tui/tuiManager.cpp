@@ -24,9 +24,14 @@ TuiManager::TuiManager()
     init_pair(2, COLOR_YELLOW, -1);
     init_pair(3, COLOR_RED, -1);
     init_pair(4, COLOR_WHITE, COLOR_BLUE);
+    init_pair(5, COLOR_WHITE, COLOR_GREEN);
+    init_pair(6, COLOR_WHITE, COLOR_YELLOW);
+    init_pair(7, COLOR_WHITE, COLOR_RED);
 }
 
-TuiManager::~TuiManager() { endwin(); }
+TuiManager::~TuiManager() {
+    endwin();
+}
 
 void TuiManager::addComponent(std::unique_ptr<TuiComponent> component)
 {
@@ -107,6 +112,39 @@ void TuiManager::display()
                         else if (ch == 'e')
                         {
                             library->selectAudio();
+                        }
+                    }
+                }
+                if (auto* player = dynamic_cast<PlayerWindow*>(component.get()))
+                {
+                    if (player->isFocused)
+                    {
+                        if (ch == 'w' or ch == KEY_UP)
+                        {
+                            player->decreaseIndex();
+                        }
+                        else if (ch == 's' or ch == KEY_DOWN)
+                        {
+                            player->increaseIndex();
+                        }
+                        else if (ch == 'd')
+                        {
+                            player->changeVolume(false);
+                        }
+                        else if (ch == 'a')
+                        {
+                            player->changeVolume(true);
+                        }
+                        else if (ch == 'e')
+                        {
+                            if (player->getIndex() == 1)
+                            {
+                                player->increaseAutoPlay();
+                            }
+                            else if (player->getIndex() == 0)
+                            {
+                                player->togglePause();
+                            }
                         }
                     }
                 }

@@ -1,18 +1,28 @@
-
 #include <iostream>
 #include <string>
 
 #define MINIAUDIO_IMPLEMENTATION
+#include <algorithm>
+
 #include "libs/miniaudio/miniaudio.h"
+#include "tui/playerWindow.hpp"
 
 static ma_engine maEngine;
 static ma_sound maSound;
 static bool engineInitialized = false;
 static bool audioInitialized = false;
+static bool isPaused = false;
+static PlayerWindow* playerWindow = nullptr;
+static int autoPlayMode = 0;  // 0: none
+// 1: repeat
+// 2: linear
+// 3: shuffle
 
-bool initPlayer()
+bool initPlayer(PlayerWindow& playerWindowRef)
 {
     if (engineInitialized) return true;
+
+    playerWindow = &playerWindowRef;
 
     const ma_result result = ma_engine_init(nullptr, &maEngine);
     if (result != MA_SUCCESS)
@@ -32,6 +42,7 @@ void unloadAudio()
     ma_sound_stop(&maSound);
     ma_sound_uninit(&maSound);
     audioInitialized = false;
+    isPaused = false;
 }
 
 void uninitPlayer()
@@ -47,7 +58,10 @@ void uninitPlayer()
 
 bool loadAudio(const std::string& filePath)
 {
-    if (!engineInitialized && !initPlayer()) return false;
+    if (!engineInitialized)
+    {
+        return false;
+    }
 
     unloadAudio();
 
@@ -59,23 +73,30 @@ bool loadAudio(const std::string& filePath)
 
     if (result != MA_SUCCESS)
     {
-        std::cerr << "Failed to load music file: " << filePath << '\n';
-        std::cerr << "miniaudio.h error: " << result << '\n';
+        playerWindow->updateAudioName(false, "");
+        std::cerr << result << "\n";
         return false;
+    }
+    else
+    {
+        playerWindow->updateAudioName(true, filePath);
     }
 
     audioInitialized = true;
+    isPaused = false;
     return true;
 }
 
 bool playAudio(const std::string& filePath)
 {
-    if (!loadAudio(filePath)) return false;
+    if (!loadAudio(filePath))
+    {
+        return false;
+    }
 
     const ma_result result = ma_sound_start(&maSound);
     if (result != MA_SUCCESS)
     {
-        std::cerr << "Failed to start music: " << result << '\n';
         unloadAudio();
         return false;
     }
@@ -83,14 +104,65 @@ bool playAudio(const std::string& filePath)
     return true;
 }
 
-void pauseAudio()
+void togglePauseAudio()
 {
-    if (audioInitialized) ma_sound_stop(&maSound);
+    if (audioInitialized)
+    {
+        if (isPaused)
+        {
+            ma_sound_start(&maSound);
+            isPaused = false;
+        }
+        else
+        {
+            ma_sound_stop(&maSound);
+            isPaused = true;
+        }
+    }
 }
 
-void resumeAudio()
+bool getAudioTime(float* current, float* total)
 {
-    if (audioInitialized) ma_sound_start(&maSound);
+    if (!audioInitialized)
+    {
+        return false;
+    }
+    ma_sound_get_cursor_in_seconds(&maSound, current);
+    ma_sound_get_length_in_seconds(&maSound, total);
+    return true;
 }
 
-bool isAudioPlaying() { return audioInitialized && ma_sound_is_playing(&maSound) == MA_TRUE; }
+void increaseVolume()
+{
+    float volume = ma_engine_get_volume(&maEngine);
+    volume = std::min(volume + 0.1f, 2.0f);
+    ma_engine_set_volume(&maEngine, volume);
+}
+
+void decreaseVolume()
+{
+    float volume = ma_engine_get_volume(&maEngine);
+    volume = std::max(volume - 0.1f, 0.0f);
+    ma_engine_set_volume(&maEngine, volume);
+}
+
+int getAutoPlayMode() {
+    return autoPlayMode;
+}
+
+void setAutoPlayMode(int mode) {
+    autoPlayMode = mode;
+}
+
+bool getPauseState() {
+    return isPaused;
+}
+
+void restartAudio()
+{
+    if (audioInitialized)
+    {
+        ma_sound_seek_to_pcm_frame(&maSound, 0);
+        ma_sound_start(&maSound);
+    }
+}

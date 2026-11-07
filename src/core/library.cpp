@@ -17,7 +17,11 @@ std::vector<std::string> listFiles(std::string path)
         {
             if (file.is_regular_file())
             {
-                files.push_back(file.path().filename().string());
+                std::string extension = file.path().extension().string();
+                if (extension == ".mp3" or extension == ".wav" or extension == ".flac")
+                {
+                    files.push_back(file.path().filename().string());
+                }
             }
         }
     }

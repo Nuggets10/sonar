@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <string>
 #include <vector>
+#include <random>
 
 #include "core/player.hpp"
 
@@ -11,7 +12,9 @@ LibraryWindow::LibraryWindow(WINDOW* window)
 {
 }
 
-LibraryWindow::~LibraryWindow() { delwin(win); }
+LibraryWindow::~LibraryWindow() {
+    delwin(win);
+}
 
 void LibraryWindow::updateWindow()
 {
@@ -42,19 +45,34 @@ void LibraryWindow::updateWindow()
     size_t end = std::min(files.size(), (size_t)(topVisibleIndex + maxRows));
     for (size_t i = topVisibleIndex; i < end; i++)
     {
+        std::string fileName = files[i];
+        int maxWidth = getmaxx(win) - 2;
+        if (fileName.length() > (size_t)maxWidth)
+        {
+            if (maxWidth > 3)
+            {
+                fileName = fileName.substr(0, maxWidth - 3) + "...";
+            }
+            else
+            {
+                fileName = fileName.substr(0, maxWidth);
+            }
+        }
+
         if (i == index)
         {
             wattron(win, COLOR_PAIR(4));
-            mvwprintw(win, y++, 1, files[i].c_str());
-            for (int j{0}; j < getmaxx(win) - (int)files[i].size() - 2; j++)
+            mvwprintw(win, y, 1, fileName.c_str());
+            for (int j{0}; j < getmaxx(win) - (int)fileName.length() - 2; j++)
             {
                 wprintw(win, " ");
             }
+            y++;
             wattroff(win, COLOR_PAIR(4));
         }
         else
         {
-            mvwprintw(win, y++, 1, files[i].c_str());
+            mvwprintw(win, y++, 1, fileName.c_str());
         }
     }
 
@@ -67,6 +85,9 @@ void LibraryWindow::increaseIndex()
     {
         index += 1;
     }
+    else if (index == files.size() - 1) {
+        index = 0;
+    }
 }
 void LibraryWindow::decreaseIndex()
 {
@@ -74,6 +95,16 @@ void LibraryWindow::decreaseIndex()
     {
         index -= 1;
     }
+    else if (index == 0) {
+        index = files.size() - 1;
+    }
+}
+
+void LibraryWindow::randomizeIndex() {
+    std::random_device randomDevice;
+    std::mt19937 gen(randomDevice());
+    std::uniform_int_distribution<int> distrib(0, files.size() - 1);
+    index = distrib(gen);
 }
 
 void LibraryWindow::addFiles(std::vector<std::string> files)
