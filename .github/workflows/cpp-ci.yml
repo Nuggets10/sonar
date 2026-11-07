@@ -2,7 +2,7 @@ name: C++ CI
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
     paths:
       - '**/*.cpp'
       - '**/*.hpp'
@@ -11,12 +11,20 @@ on:
       - '**/*.h.in'
       - '**/Makefile'
 
+  workflow_dispatch:
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: make
-      run: make
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libncurses-dev
+
+      - name: Compile
+        run: make
