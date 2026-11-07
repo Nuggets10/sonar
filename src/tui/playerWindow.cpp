@@ -27,10 +27,10 @@ void PlayerWindow::clearTui()
     mvwprintw(win, 2, 1, "00:00:00 - HH:MM:SS");
     mvwprintw(win, 3, 1, "[");
     std::string progressBarPlaceholder(getmaxx(win) - 4, '.');
-    mvwprintw(win, 3, 2, progressBarPlaceholder.c_str());
+    mvwprintw(win, 3, 2, "%s", progressBarPlaceholder.c_str());
     mvwprintw(win, 3, getmaxx(win) - 2, "]");
     mvwprintw(win, 8, 1, "[");
-    mvwprintw(win, 8, 2, progressBarPlaceholder.c_str());
+    mvwprintw(win, 8, 2, "%s", progressBarPlaceholder.c_str());
     mvwprintw(win, 8, getmaxx(win) - 2, "]");
 }
 
@@ -49,7 +49,7 @@ void PlayerWindow::updateTime(float current, float total)
     char timeStr[40];
     snprintf(timeStr, sizeof(timeStr), "%02d:%02d:%02d - %02d:%02d:%02d", curH, curM, curS, totH,
              totM, totS);
-    mvwprintw(win, 2, 1, timeStr);
+    mvwprintw(win, 2, 1, "%s", timeStr);
 
     int barWidth = getmaxx(win) - 4;
     int progress = 0;
