@@ -62,7 +62,7 @@ void LibraryWindow::updateWindow()
         if (i == index)
         {
             wattron(win, COLOR_PAIR(4));
-            mvwprintw(win, y, 1, fileName.c_str());
+            mvwprintw(win, y, 1, "%s", fileName.c_str());
             for (int j{0}; j < getmaxx(win) - (int)fileName.length() - 2; j++)
             {
                 wprintw(win, " ");
@@ -72,7 +72,7 @@ void LibraryWindow::updateWindow()
         }
         else
         {
-            mvwprintw(win, y++, 1, fileName.c_str());
+            mvwprintw(win, y++, 1, "%s", fileName.c_str());
         }
     }
 
