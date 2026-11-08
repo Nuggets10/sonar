@@ -28,7 +28,7 @@ jobs:
       
       - name: Check formatting
         run: |
-          astyle --project --dry-run --error-on-changes --recursive --exclude=include/libs "*.c" "*.cpp" "*.h" "*.hpp"
+          find "$(dirname "$(dirname "$0")")" -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.c" -o -name "*.h" \) -not -path "*/include/libs/*" -exec astyle --project --dry-run --error-on-changes -n {} +
 
       - name: Compile
         run: make
