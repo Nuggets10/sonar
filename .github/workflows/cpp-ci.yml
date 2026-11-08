@@ -15,7 +15,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -24,7 +24,11 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libncurses-dev
+          sudo apt-get install -y build-essential libncurses-dev astyle
+      
+      - name: Check formatting
+        run: |
+          astyle --project --dry-run --error-on-changes --recursive --exclude=include/libs "*.c" "*.cpp" "*.h" "*.hpp"
 
       - name: Compile
         run: make
