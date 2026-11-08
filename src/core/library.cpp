@@ -11,6 +11,7 @@
 std::vector<std::string> listFiles(std::string path)
 {
     std::vector<std::string> files;
+
     if (std::filesystem::exists(path) && std::filesystem::is_directory(path))
     {
         for (std::filesystem::directory_entry file : std::filesystem::directory_iterator(path))
@@ -18,6 +19,7 @@ std::vector<std::string> listFiles(std::string path)
             if (file.is_regular_file())
             {
                 std::string extension = file.path().extension().string();
+
                 if (extension == ".mp3" or extension == ".wav" or extension == ".flac")
                 {
                     files.push_back(file.path().filename().string());
@@ -25,6 +27,7 @@ std::vector<std::string> listFiles(std::string path)
             }
         }
     }
+
     return files;
 }
 

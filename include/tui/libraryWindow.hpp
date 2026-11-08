@@ -8,21 +8,21 @@
 
 class LibraryWindow : public TuiComponent
 {
-public:
-    LibraryWindow(WINDOW* window);
-    ~LibraryWindow();
+    public:
+        LibraryWindow(WINDOW* window);
+        ~LibraryWindow();
 
-    void updateWindow() override;
-    void addFiles(std::vector<std::string> files);
-    void increaseIndex();
-    void decreaseIndex();
-    void randomizeIndex();
-    void selectAudio();
-    bool isFocused;
+        void updateWindow() override;
+        void addFiles(std::vector<std::string> files);
+        void increaseIndex();
+        void decreaseIndex();
+        void randomizeIndex();
+        void selectAudio();
+        bool isFocused;
 
-private:
-    WINDOW* win;
-    std::vector<std::string> files;
-    size_t topVisibleIndex;
-    size_t index;
+    private:
+        WINDOW *win;
+        std::vector<std::string> files;
+        size_t topVisibleIndex;
+        size_t index;
 };

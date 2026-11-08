@@ -29,7 +29,8 @@ TuiManager::TuiManager()
     init_pair(7, COLOR_WHITE, COLOR_RED);
 }
 
-TuiManager::~TuiManager() {
+TuiManager::~TuiManager()
+{
     endwin();
 }
 
@@ -46,120 +47,158 @@ void TuiManager::display()
 
     while (isRunning)
     {
-        for (std::unique_ptr<TuiComponent>& component : components)
+        for (std::unique_ptr<TuiComponent> &component : components)
         {
             component->updateWindow();
         }
 
         ch = getch();
+
         if (ch == 'q')
         {
             isRunning = false;
         }
-        else if (ch == '1')
-        {
-            for (std::unique_ptr<TuiComponent>& component : components)
-            {
-                if (auto* player = dynamic_cast<PlayerWindow*>(component.get()))
-                    player->isFocused = false;
-                if (auto* library = dynamic_cast<LibraryWindow*>(component.get()))
-                    library->isFocused = true;
-                if (auto* equalizer = dynamic_cast<EqualizerWindow*>(component.get()))
-                    equalizer->isFocused = false;
-            }
-        }
-
-        else if (ch == '2')
-        {
-            for (std::unique_ptr<TuiComponent>& component : components)
-            {
-                if (auto* player = dynamic_cast<PlayerWindow*>(component.get()))
-                    player->isFocused = true;
-                if (auto* library = dynamic_cast<LibraryWindow*>(component.get()))
-                    library->isFocused = false;
-                if (auto* equalizer = dynamic_cast<EqualizerWindow*>(component.get()))
-                    equalizer->isFocused = false;
-            }
-        }
-        else if (ch == '3')
-        {
-            for (std::unique_ptr<TuiComponent>& component : components)
-            {
-                if (auto* player = dynamic_cast<PlayerWindow*>(component.get()))
-                    player->isFocused = false;
-                if (auto* library = dynamic_cast<LibraryWindow*>(component.get()))
-                    library->isFocused = false;
-                if (auto* equalizer = dynamic_cast<EqualizerWindow*>(component.get()))
-                    equalizer->isFocused = true;
-            }
-        }
         else
-        {
-            for (std::unique_ptr<TuiComponent>& component : components)
+            if (ch == '1')
             {
-                if (auto* library = dynamic_cast<LibraryWindow*>(component.get()))
+                for (std::unique_ptr<TuiComponent> &component : components)
                 {
-                    if (library->isFocused)
+                    if (auto * player = dynamic_cast<PlayerWindow * >(component.get()))
                     {
-                        if (ch == 'w' or ch == KEY_UP)
-                        {
-                            library->decreaseIndex();
-                        }
-                        else if (ch == 's' or ch == KEY_DOWN)
-                        {
-                            library->increaseIndex();
-                        }
-                        else if (ch == 'e')
-                        {
-                            library->selectAudio();
-                        }
+                        player->isFocused = false;
                     }
-                }
-                if (auto* player = dynamic_cast<PlayerWindow*>(component.get()))
-                {
-                    if (player->isFocused)
+
+                    if (auto * library = dynamic_cast<LibraryWindow * >(component.get()))
                     {
-                        if (ch == 'w' or ch == KEY_UP)
-                        {
-                            player->decreaseIndex();
-                        }
-                        else if (ch == 's' or ch == KEY_DOWN)
-                        {
-                            player->increaseIndex();
-                        }
-                        else if (ch == 'd')
-                        {
-                            player->changeVolume(false);
-                        }
-                        else if (ch == 'a')
-                        {
-                            player->changeVolume(true);
-                        }
-                        else if (ch == 'e')
-                        {
-                            if (player->getIndex() == 1)
-                            {
-                                player->increaseAutoPlay();
-                            }
-                            else if (player->getIndex() == 0)
-                            {
-                                player->togglePause();
-                            }
-                        }
+                        library->isFocused = true;
+                    }
+
+                    if (auto * equalizer = dynamic_cast<EqualizerWindow * >(component.get()))
+                    {
+                        equalizer->isFocused = false;
                     }
                 }
             }
-        }
+
+            else
+                if (ch == '2')
+                {
+                    for (std::unique_ptr<TuiComponent> &component : components)
+                    {
+                        if (auto * player = dynamic_cast<PlayerWindow * >(component.get()))
+                        {
+                            player->isFocused = true;
+                        }
+
+                        if (auto * library = dynamic_cast<LibraryWindow * >(component.get()))
+                        {
+                            library->isFocused = false;
+                        }
+
+                        if (auto * equalizer = dynamic_cast<EqualizerWindow * >(component.get()))
+                        {
+                            equalizer->isFocused = false;
+                        }
+                    }
+                }
+                else
+                    if (ch == '3')
+                    {
+                        for (std::unique_ptr<TuiComponent> &component : components)
+                        {
+                            if (auto * player = dynamic_cast<PlayerWindow * >(component.get()))
+                            {
+                                player->isFocused = false;
+                            }
+
+                            if (auto * library = dynamic_cast<LibraryWindow * >(component.get()))
+                            {
+                                library->isFocused = false;
+                            }
+
+                            if (auto * equalizer = dynamic_cast<EqualizerWindow * >(component.get()))
+                            {
+                                equalizer->isFocused = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (std::unique_ptr<TuiComponent> &component : components)
+                        {
+                            if (auto * library = dynamic_cast<LibraryWindow * >(component.get()))
+                            {
+                                if (library->isFocused)
+                                {
+                                    if (ch == 'w' or ch == KEY_UP)
+                                    {
+                                        library->decreaseIndex();
+                                    }
+                                    else
+                                        if (ch == 's' or ch == KEY_DOWN)
+                                        {
+                                            library->increaseIndex();
+                                        }
+                                        else
+                                            if (ch == 'e')
+                                            {
+                                                library->selectAudio();
+                                            }
+                                }
+                            }
+
+                            if (auto * player = dynamic_cast<PlayerWindow * >(component.get()))
+                            {
+                                if (player->isFocused)
+                                {
+                                    if (ch == 'w' or ch == KEY_UP)
+                                    {
+                                        player->decreaseIndex();
+                                    }
+                                    else
+                                        if (ch == 's' or ch == KEY_DOWN)
+                                        {
+                                            player->increaseIndex();
+                                        }
+                                        else
+                                            if (ch == 'd')
+                                            {
+                                                player->changeVolume(false);
+                                            }
+                                            else
+                                                if (ch == 'a')
+                                                {
+                                                    player->changeVolume(true);
+                                                }
+                                                else
+                                                    if (ch == 'e')
+                                                    {
+                                                        if (player->getIndex() == 1)
+                                                        {
+                                                            player->increaseAutoPlay();
+                                                        }
+                                                        else
+                                                            if (player->getIndex() == 0)
+                                                            {
+                                                                player->togglePause();
+                                                            }
+                                                    }
+                                }
+                            }
+                        }
+                    }
     }
 }
 
-WINDOW* TuiManager::createWindow(int height, int width, int y, int x)
+WINDOW *TuiManager::createWindow(int height, int width, int y, int x)
 {
     WINDOW* window = newwin(height, width, y, x);
+
     if (height > 1)
     {
         box(window, 0, 0);
     }
+
     wrefresh(window);
     return window;
 }

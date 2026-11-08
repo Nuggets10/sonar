@@ -12,7 +12,7 @@ static ma_sound maSound;
 static bool engineInitialized = false;
 static bool audioInitialized = false;
 static bool isPaused = false;
-static PlayerWindow* playerWindow = nullptr;
+static PlayerWindow *playerWindow = nullptr;
 static int autoPlayMode = 0;  // 0: none
 // 1: repeat
 // 2: linear
@@ -20,11 +20,15 @@ static int autoPlayMode = 0;  // 0: none
 
 bool initPlayer(PlayerWindow& playerWindowRef)
 {
-    if (engineInitialized) return true;
+    if (engineInitialized)
+    {
+        return true;
+    }
 
     playerWindow = &playerWindowRef;
 
     const ma_result result = ma_engine_init(nullptr, &maEngine);
+
     if (result != MA_SUCCESS)
     {
         std::cerr << "Audio engine initialization failed: " << result << '\n';
@@ -37,7 +41,10 @@ bool initPlayer(PlayerWindow& playerWindowRef)
 
 void unloadAudio()
 {
-    if (!audioInitialized) return;
+    if (!audioInitialized)
+    {
+        return;
+    }
 
     ma_sound_stop(&maSound);
     ma_sound_uninit(&maSound);
@@ -95,6 +102,7 @@ bool playAudio(const std::string& filePath)
     }
 
     const ma_result result = ma_sound_start(&maSound);
+
     if (result != MA_SUCCESS)
     {
         unloadAudio();
@@ -127,6 +135,7 @@ bool getAudioTime(float* current, float* total)
     {
         return false;
     }
+
     ma_sound_get_cursor_in_seconds(&maSound, current);
     ma_sound_get_length_in_seconds(&maSound, total);
     return true;
@@ -146,15 +155,18 @@ void decreaseVolume()
     ma_engine_set_volume(&maEngine, volume);
 }
 
-int getAutoPlayMode() {
+int getAutoPlayMode()
+{
     return autoPlayMode;
 }
 
-void setAutoPlayMode(int mode) {
+void setAutoPlayMode(int mode)
+{
     autoPlayMode = mode;
 }
 
-bool getPauseState() {
+bool getPauseState()
+{
     return isPaused;
 }
 

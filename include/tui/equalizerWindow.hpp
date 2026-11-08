@@ -5,13 +5,13 @@
 
 class EqualizerWindow : public TuiComponent
 {
-public:
-    EqualizerWindow(WINDOW* window);
-    ~EqualizerWindow();
+    public:
+        EqualizerWindow(WINDOW* window);
+        ~EqualizerWindow();
 
-    void updateWindow() override;
-    bool isFocused;
+        void updateWindow() override;
+        bool isFocused;
 
-private:
-    WINDOW* win;
+    private:
+        WINDOW *win;
 };

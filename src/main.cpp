@@ -19,19 +19,21 @@ int main(int argc, char* argv[])
         for (int i{1}; i < argc; i++)
         {
             std::string_view arg{argv[i]};
+
             if (arg == "--v" or arg == "--version")
             {
                 v_flag = true;
             }
             else
             {
-                std::cerr << "\033[91mUnknown argument '" << arg << "'" << std::endl;
+                std::cerr << "Unknown argument '" << arg << "'" << std::endl;
                 return 1;
             }
         }
+
         if (v_flag)
         {
-            std::cout << "Version \033[93m" << PROJECT_VERSION << "\033[0m" << std::endl;
+            std::cout << "Version " << PROJECT_VERSION << std::endl;
             return 0;
         }
     }
