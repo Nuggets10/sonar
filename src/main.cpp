@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 
     initPlayer(playerWindowRef);
 
-    window = tuiManager.createWindow(tuiManager.height / 2 + 1, 2 * tuiManager.width / 3,
+    window = tuiManager.createWindow(tuiManager.height / 2 + 2, 2 * tuiManager.width / 3,
                                      tuiManager.height / 2 - 2, tuiManager.width / 3);
     tuiManager.addComponent(std::make_unique<EqualizerWindow>(window));
 
