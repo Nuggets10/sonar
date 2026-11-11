@@ -36,4 +36,4 @@ All kinds of contributions are appreciated.
 Please refer to [CONTRIBUTING.md](https://github.com/Nuggets10/sonar/blob/main/CONTRIBUTING.md) for the full documentation.
 
 ## License
-<img src="licenseBanner.jpg" width="200" height="149" alt="MIT License">
+<img src="assets/licenseBanner.jpg" width="200" height="149" alt="MIT License">
